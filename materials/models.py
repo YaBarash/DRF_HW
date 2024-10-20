@@ -50,6 +50,10 @@ class Lesson(models.Model):
     )
     video = models.URLField(
         max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на видео",
+        help_text="Введите ссылку на видео",
     )
     course = models.ForeignKey(
         Course,
@@ -58,6 +62,7 @@ class Lesson(models.Model):
         help_text="Выберите курс",
         blank=True,
         null=True,
+        related_name="lesson_set",
     )
 
     def __str__(self):
