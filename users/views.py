@@ -7,10 +7,11 @@ from rest_framework.generics import (
     UpdateAPIView,
     RetrieveAPIView,
 )
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import User, Payment
+from users.permissions import IsUserProfileOwner, IsUserOwner
 from users.serializers import UserSerializer, PaymentSerializer, UserCreateSerializer
 
 
@@ -33,21 +34,25 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = (IsUserProfileOwner, IsAuthenticated,)
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = (IsAuthenticated, IsUserOwner,)
 
 
 class UserUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = (IsAuthenticated, IsUserOwner,)
 
 
 class UserDestroyAPIView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = (IsAuthenticated, IsUserOwner,)
 
 
 class PaymentCreateAPIView(CreateAPIView):

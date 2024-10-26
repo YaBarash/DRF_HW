@@ -15,10 +15,8 @@ class UserCreateSerializer(ModelSerializer):
         fields = (
             "id",
             "email",
-            "phone_number",
             "city",
             "avatar",
-            "password",
         )
 
 
