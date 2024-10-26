@@ -9,6 +9,17 @@ class PaymentSerializer(ModelSerializer):
         fields = "__all__"
 
 
+class UserCreateSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "city",
+            "avatar",
+        )
+
+
 class UserSerializer(ModelSerializer):
     payments = PaymentSerializer(
         source="payment",
@@ -23,4 +34,5 @@ class UserSerializer(ModelSerializer):
             "phone_number",
             "city",
             "avatar",
+            "payments",
         )

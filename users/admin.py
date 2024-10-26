@@ -13,8 +13,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "amount",
-        "payment_method"
-    )
+    list_display = ("user", "amount", "payment_method")
