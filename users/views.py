@@ -34,25 +34,37 @@ class UserCreateAPIView(CreateAPIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = (IsUserProfileOwner, IsAuthenticated,)
+    permission_classes = (
+        IsUserProfileOwner,
+        IsAuthenticated,
+    )
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = (IsAuthenticated, IsUserOwner,)
+    permission_classes = (
+        IsAuthenticated,
+        IsUserOwner,
+    )
 
 
 class UserUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = (IsAuthenticated, IsUserOwner,)
+    permission_classes = (
+        IsAuthenticated,
+        IsUserOwner,
+    )
 
 
 class UserDestroyAPIView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
-    permission_classes = (IsAuthenticated, IsUserOwner,)
+    permission_classes = (
+        IsAuthenticated,
+        IsUserOwner,
+    )
 
 
 class PaymentCreateAPIView(CreateAPIView):
