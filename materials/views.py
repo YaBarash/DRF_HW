@@ -1,4 +1,8 @@
+
+from django.shortcuts import get_object_or_404
+from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import (
     CreateAPIView,
@@ -8,7 +12,7 @@ from rest_framework.generics import (
     DestroyAPIView,
 )
 
-from materials.models import Course, Lesson
+from materials.models import Course, Lesson, Subscription
 from materials.serializers import (
     CourseSerializer,
     LessonSerializer,
@@ -72,3 +76,31 @@ class LessonDestroyAPIView(DestroyAPIView):
         ~IsUserModerator | IsUserOwner,
         IsAuthenticated,
     )
+
+
+class SubscriptionAPIView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    # Определяем набор данных, который будет использоваться
+    queryset = Course.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        course_id = request.data.get('course_id')
+
+        # Используем GenericAPIView для получения объекта курса
+        course = get_object_or_404(self.get_queryset(), id=course_id)
+
+        # Получаем или создаем подписку
+        subscription, created = Subscription.objects.get_or_create(user=user, course=course)
+
+        if not created:
+            # Если подписка уже существует, удаляем ее
+            subscription.delete()
+            message = 'Подписка удалена'
+            Subscription.sign_of_subscription = False
+        else:
+            # Если подписки нет, создаем новую
+            message = 'Подписка добавлена'
+            Subscription.sign_of_subscription = True
+
+        return Response({"message": message})
