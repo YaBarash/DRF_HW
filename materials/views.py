@@ -12,6 +12,7 @@ from rest_framework.generics import (
 )
 
 from materials.models import Course, Lesson, Subscription
+from materials.paginators import Pagination
 from materials.serializers import (
     CourseSerializer,
     LessonSerializer,
@@ -23,6 +24,7 @@ from users.permissions import IsUserModerator, IsUserOwner
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = Pagination
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -48,6 +50,7 @@ class LessonCreateAPIView(CreateAPIView):
 class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    pagination_class = Pagination
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
