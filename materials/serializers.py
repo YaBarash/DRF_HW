@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from materials.models import Course, Lesson
+from materials.models import Course, Lesson, Subscription
+from materials.validators import ValidateAllowUrl
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -13,6 +14,7 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+        validators = [ValidateAllowUrl(allow_url="video")]
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -25,3 +27,9 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ("title", "count_lesson", "lessons_info")
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = ("sign_of_subscription",)

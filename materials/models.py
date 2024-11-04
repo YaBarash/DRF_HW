@@ -1,5 +1,7 @@
 from django.db import models
 
+from config.settings import AUTH_USER_MODEL
+
 
 class Course(models.Model):
     title = models.CharField(
@@ -20,6 +22,8 @@ class Course(models.Model):
         verbose_name="Описание курса",
         help_text="Введите описание курса",
     )
+    owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True,
+                              verbose_name='владелец',)
 
     def __str__(self):
         return self.title
@@ -64,6 +68,8 @@ class Lesson(models.Model):
         null=True,
         related_name="lesson_set",
     )
+    owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True,
+                              verbose_name='владелец',)
 
     def __str__(self):
         return self.title
@@ -71,3 +77,31 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="Пользователь",
+        null=True,
+        blank=True,
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        related_name="Курс",
+        null=True,
+        blank=True,
+    )
+    sign_of_subscription = models.BooleanField(
+        default=False,
+        verbose_name="Признак подписки",
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+
+    def __str__(self):
+        return f"{self.user} - {self.course}"
