@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status, generics
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -16,7 +17,7 @@ from materials.paginators import Pagination
 from materials.serializers import (
     CourseSerializer,
     LessonSerializer,
-    CourseDetailSerializer,
+    CourseDetailSerializer, SubscriptionSerializer,
 )
 from users.permissions import IsUserModerator, IsUserOwner
 
@@ -85,6 +86,7 @@ class SubscriptionAPIView(generics.GenericAPIView):
     # Определяем набор данных, который будет использоваться
     queryset = Course.objects.all()
 
+    @swagger_auto_schema(request_body=SubscriptionSerializer)
     def post(self, request, *args, **kwargs):
         user = request.user
         course_id = request.data.get("course_id")
