@@ -1,4 +1,3 @@
-
 from django.shortcuts import get_object_or_404
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
@@ -85,22 +84,24 @@ class SubscriptionAPIView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        course_id = request.data.get('course_id')
+        course_id = request.data.get("course_id")
 
         # Используем GenericAPIView для получения объекта курса
         course = get_object_or_404(self.get_queryset(), id=course_id)
 
         # Получаем или создаем подписку
-        subscription, created = Subscription.objects.get_or_create(user=user, course=course)
+        subscription, created = Subscription.objects.get_or_create(
+            user=user, course=course
+        )
 
         if not created:
             # Если подписка уже существует, удаляем ее
             subscription.delete()
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
             Subscription.sign_of_subscription = False
         else:
             # Если подписки нет, создаем новую
-            message = 'Подписка добавлена'
+            message = "Подписка добавлена"
             Subscription.sign_of_subscription = True
 
         return Response({"message": message})

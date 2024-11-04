@@ -9,5 +9,7 @@ class ValidateAllowUrl:
         allow_url = "https://www.youtube.com"
         if value_url.get("video"):
             if not value_url.get("video") in allow_url:
-                raise ValidationError("Необходимо присутствие ссылки на youtube, а не сторонний ресурс")
+                raise ValidationError(
+                    "Необходимо присутствие ссылки на youtube, а не сторонний ресурс"
+                )
         return None

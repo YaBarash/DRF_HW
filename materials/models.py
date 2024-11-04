@@ -76,13 +76,28 @@ class Lesson(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="Пользователь", null=True, blank=True,)
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name="Курс", null=True, blank=True,)
-    sign_of_subscription = models.BooleanField(default=False, verbose_name='Признак подписки',)
+    user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="Пользователь",
+        null=True,
+        blank=True,
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        related_name="Курс",
+        null=True,
+        blank=True,
+    )
+    sign_of_subscription = models.BooleanField(
+        default=False,
+        verbose_name="Признак подписки",
+    )
 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
 
     def __str__(self):
         return f"{self.user} - {self.course}"
