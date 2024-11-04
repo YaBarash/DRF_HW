@@ -13,26 +13,28 @@ def convert_rub_to_dollar(amount):
     return int(rate * amount)
 
 
-def create_stripe_product(product):
+def create_stripe_product(prod):
     """Создает продукт в страйпе"""
-    stripe.Product.create(name="Payment")
+    product = prod.paid_course if prod.paid_course else prod.paid_lesson
+    stripe_product = stripe.Product.create(name=product)
+    return stripe_product.get("id")
 
 
-def create_stripe_price(amount):
+def create_stripe_price(amount, product_id):
     """Создает цену в страйпе"""
-    return stripe.Price.create(
+    stripe_price = stripe.Price.create(
         currency="usd",
         unit_amount=amount * 100,
-        product_data={"name": "Payment"},
+        product_data={"name": product_id},
     )
+    return stripe_price.get("id")
 
 
-def create_stripe_session(price):
+def create_stripe_session(stripe_price):
     """Создает сессию на оплату в страйпе"""
     session = stripe.checkout.Session.create(
         success_url="https://127.0.0.1:8000/",
-        return_url="https://127.0.0.1:8000/materials/",
-        line_items=[{"price": price.get("id"), "quantity": 1}],
+        line_items=[{"price": stripe_price.get("id"), "quantity": 1}],
         mode="payment",
     )
     return session.get("id"), session.get("url")
