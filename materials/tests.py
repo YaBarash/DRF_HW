@@ -13,47 +13,47 @@ class LessonTestCase(APITestCase):
             title="Test Course",
             description="This is a test course",
         )
-        self.lesson = Lesson.objects.create(title='Lesson Test', course=self.course, owner=self.user)
+        self.lesson = Lesson.objects.create(
+            title="Lesson Test", course=self.course, owner=self.user
+        )
         self.client.force_authenticate(user=self.user)
 
     def test_getting_lesson_retrieve(self):
-        self.url = reverse('materials:lesson_retrieve', args=(self.lesson.pk,))
+        self.url = reverse("materials:lesson_retrieve", args=(self.lesson.pk,))
         response = self.client.get(self.url)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data.get('title'), self.lesson.title)
-        self.assertEqual(data.get('course'), self.lesson.course.id)
+        self.assertEqual(data.get("title"), self.lesson.title)
+        self.assertEqual(data.get("course"), self.lesson.course.id)
 
     def test_getting_lesson_create(self):
-        self.url = reverse('materials:lesson_create')
+        self.url = reverse("materials:lesson_create")
         data = {
             "title": "Lesson Test Creation",
             "course": self.course.id,
             "owner": self.user.id,
-            "video": "https://www.youtube.com"
+            "video": "https://www.youtube.com",
         }
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Lesson.objects.all().count(), 2)
-        self.assertEqual(data.get('title'), "Lesson Test Creation")
+        self.assertEqual(data.get("title"), "Lesson Test Creation")
 
     def test_getting_lesson_update(self):
-        self.url = reverse('materials:lesson_update', args=(self.lesson.pk,))
-        data = {
-            "title": "Lesson Test Update"
-        }
+        self.url = reverse("materials:lesson_update", args=(self.lesson.pk,))
+        data = {"title": "Lesson Test Update"}
         response = self.client.patch(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data.get('title'), "Lesson Test Update")
+        self.assertEqual(data.get("title"), "Lesson Test Update")
 
     def test_getting_lesson_delete(self):
-        self.url = reverse('materials:lesson_delete', args=(self.lesson.pk,))
+        self.url = reverse("materials:lesson_delete", args=(self.lesson.pk,))
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.all().count(), 0)
 
     def test_getting_lesson_list(self):
-        self.url = reverse('materials:lesson_list')
+        self.url = reverse("materials:lesson_list")
         response = self.client.get(self.url)
         # print(response.json())
         data = {
@@ -68,9 +68,9 @@ class LessonTestCase(APITestCase):
                     "preview": None,
                     "video": None,
                     "course": self.course.id,
-                    "owner": self.user.id
+                    "owner": self.user.id,
                 }
-            ]
+            ],
         }
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), data)
@@ -84,7 +84,8 @@ class SubscriptionTestCase(APITestCase):
             description="This is a test course",
         )
         self.client.force_authenticate(user=self.user)
-        self.url = reverse('materials:subscription_create')
+        self.url = reverse("materials:subscription_create")
+
     def test_subscription_activate(self):
         data = {
             "user": self.user.id,
@@ -98,9 +99,7 @@ class SubscriptionTestCase(APITestCase):
                 "message": "Подписка добавлена",
             },
         )
-        self.assertTrue(
-            Subscription.sign_of_subscription
-        )
+        self.assertTrue(Subscription.sign_of_subscription)
 
     def test_subscription_deactivate(self):
         Subscription.objects.create(user=self.user, course=self.course)

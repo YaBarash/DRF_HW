@@ -32,4 +32,4 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
-        fields = ("sign_of_subscription",)
+        fields = "__all__"
