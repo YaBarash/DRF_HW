@@ -21,6 +21,7 @@ from materials.serializers import (
     SubscriptionSerializer,
 )
 from users.permissions import IsUserModerator, IsUserOwner
+from materials.tasks import mail_update_course_info
 
 
 class CourseViewSet(ModelViewSet):
@@ -32,6 +33,11 @@ class CourseViewSet(ModelViewSet):
         if self.action == "retrieve":
             return CourseDetailSerializer
         return CourseSerializer
+
+    def perform_update(self, serializer):
+        update_course = serializer.save()
+        mail_update_course_info.delay()
+        update_course.save()
 
     def get_permissions(self):
         if self.action == "create":
