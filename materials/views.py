@@ -17,7 +17,8 @@ from materials.paginators import Pagination
 from materials.serializers import (
     CourseSerializer,
     LessonSerializer,
-    CourseDetailSerializer, SubscriptionSerializer,
+    CourseDetailSerializer,
+    SubscriptionSerializer,
 )
 from users.permissions import IsUserModerator, IsUserOwner
 

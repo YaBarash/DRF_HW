@@ -83,17 +83,22 @@ class Payment(models.Model):
     )
     payment_method = models.CharField(
         max_length=15,
-        choices=(("cash", "наличными"), ("card", "картой")), blank=True,
+        choices=(("cash", "наличными"), ("card", "картой")),
+        blank=True,
         null=True,
     )
-    session_id = models.CharField(max_length=255,
-                                  verbose_name='ID сессии',
-                                  blank=True,
-                                  null=True, )
-    link_to_payment = models.URLField(max_length=400,
-                                      verbose_name='ссылка на оплату',
-                                      blank=True,
-                                      null=True, )
+    session_id = models.CharField(
+        max_length=255,
+        verbose_name="ID сессии",
+        blank=True,
+        null=True,
+    )
+    link_to_payment = models.URLField(
+        max_length=400,
+        verbose_name="ссылка на оплату",
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return f"{self.user} - {self.amount} руб."
