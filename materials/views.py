@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -36,7 +36,7 @@ class CourseViewSet(ModelViewSet):
 
     def perform_update(self, serializer):
         update_course = serializer.save()
-        mail_update_course_info.delay()
+        mail_update_course_info.delay(update_course.id)
         update_course.save()
 
     def get_permissions(self):
