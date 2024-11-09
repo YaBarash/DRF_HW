@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -21,6 +21,7 @@ from materials.serializers import (
     SubscriptionSerializer,
 )
 from users.permissions import IsUserModerator, IsUserOwner
+from materials.tasks import mail_update_course_info
 
 
 class CourseViewSet(ModelViewSet):
@@ -32,6 +33,11 @@ class CourseViewSet(ModelViewSet):
         if self.action == "retrieve":
             return CourseDetailSerializer
         return CourseSerializer
+
+    def perform_update(self, serializer):
+        update_course = serializer.save()
+        mail_update_course_info.delay(update_course.id)
+        update_course.save()
 
     def get_permissions(self):
         if self.action == "create":
