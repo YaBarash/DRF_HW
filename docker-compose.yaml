@@ -1,0 +1,48 @@
+version: '3.12'
+
+services:
+  redis:
+    image: redis:latest
+    restart: on-failure
+    expose:
+      - "6379:6379"
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: AlinaBaranova1
+      PGDATA: /var/lib/postgresql/data/pgdata
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - app
+    env_file:
+      - .env
+  celery-beat:
+      build: .
+      tty: true
+      command: celery -A config beat
+      restart: on-failure
+      volumes:
+        - .:/app
+      depends_on:
+        - redis
+        - db
+        - app
+      env_file:
+        - .env
