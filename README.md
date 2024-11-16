@@ -1,16 +1,20 @@
 # DRF_HW
 Create DRF SPA Web-app. Develop LMS-system
+***
+1. Запустить докер
 
-*Запустить докер
-docker run -p 8080:80 nginx:latest
+* `docker run -p 8080:80 nginx:latest`
 
-*Задать настройки приложения в docker-compose.yaml
+2. Задать настройки приложения в `docker-compose.yaml`
 
-*Создать образ
-docker-compose build
+3. Создать образ
 
-*Запуск конфигураций
-docker-compose up -d
+* `docker-compose build`
 
-*Применение миграций
-codker-compose exec app python manage.py migrate
+4. Запуск конфигураций
+
+* `docker-compose up -d`
+
+5. Применение миграций
+
+* `docker-compose exec app python manage.py migrate`
