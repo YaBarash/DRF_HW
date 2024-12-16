@@ -1,4 +1,4 @@
-# DRF_HW
+# Сервис управления рассылками
 Create DRF SPA Web-app. Develop LMS-system
 ***
 1. Запустить докер
