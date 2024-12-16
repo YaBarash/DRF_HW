@@ -17,4 +17,8 @@ Create DRF SPA Web-app. Develop LMS-system
 
 5. Применение миграций
 
+
 * `docker-compose exec app python manage.py migrate`
+
+* `docker-compose exec app python manage.py migrate`
+
